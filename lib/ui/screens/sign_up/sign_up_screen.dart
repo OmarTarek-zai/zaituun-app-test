@@ -4,9 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
 import 'package:zaituun/ui/screens/coming_soon/coming_soon_screen.dart';
+import 'package:zaituun/ui/screens/sign_up/sign_up_screen_states.dart';
+import 'package:zaituun/ui/screens/sign_up/sign_up_view_model.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
 import 'package:zaituun/ui/widgets/text/terms_of_service_text.dart';
 import 'package:zaituun/utils/validator.dart';
@@ -21,6 +24,10 @@ class SignUpScreen extends HookConsumerWidget {
     final passwordTextController = useTextEditingController();
     final passwordValid = useIsPasswordValid(passwordTextController);
     final passwordShown = useState(false);
+
+    final vm = ref.read(SignUpViewModel.provider.notifier);
+    final vmState = ref.watch(SignUpViewModel.provider);
+    final isLoading = vmState is SignUpLoadingState;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -89,10 +96,11 @@ class SignUpScreen extends HookConsumerWidget {
                             ),
                           )),
                           keyboardType: TextInputType.visiblePassword,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           textInputAction: TextInputAction.done,
-                          onSubmitted: (value) => print(
-                              '==> Submit with values ${emailTextController.text} and ${passwordTextController.text}'),
+                          onSubmitted: (value) => vm.signUp(
+                              emailTextController.text,
+                              passwordTextController.text),
                         ),
                       ),
                       Gap(20.spMin),
@@ -110,9 +118,11 @@ class SignUpScreen extends HookConsumerWidget {
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 39.spMin),
                           child: TransquishableWidget(
-                              enabled: passwordValid.value && emailValid.value,
-                              onTap: () => print(
-                                  '==> Sign up with values ${emailTextController.text} and ${passwordTextController.text}'),
+                              enabled: passwordValid.value &&
+                                  emailValid.value &&
+                                  !isLoading,
+                              onTap: () => vm.signUp(emailTextController.text,
+                                  passwordTextController.text),
                               child: Container(
                                   height: 49.spMin,
                                   decoration:
@@ -120,13 +130,17 @@ class SignUpScreen extends HookConsumerWidget {
                                           ? Decorations.mainWhiteButton
                                           : Decorations.mainWhiteButtonDisabled,
                                   child: Center(
-                                    child: Text(
-                                      'Register',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge!
-                                          .copyWith(color: Colors.black),
-                                    ),
+                                    child: !isLoading
+                                        ? Text(
+                                            'Register',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge!
+                                                .copyWith(color: Colors.black),
+                                          )
+                                        : LoadingAnimationWidget.inkDrop(
+                                            color: Colors.black,
+                                            size: 25.spMin),
                                   )))),
                       Gap(34.spMin),
                       Padding(

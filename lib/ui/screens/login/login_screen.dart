@@ -4,8 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
+import 'package:zaituun/ui/screens/login/login_screen_states.dart';
+import 'package:zaituun/ui/screens/login/login_screen_view_model.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
 import 'package:zaituun/ui/widgets/text/terms_of_service_text.dart';
 
@@ -17,6 +20,10 @@ class LoginScreen extends HookConsumerWidget {
     final passwordShown = useState(false);
     final emailTextController = useTextEditingController();
     final passwordTextController = useTextEditingController();
+
+    final vm = ref.read(LoginScreenViewModel.provider.notifier);
+    final vmState = ref.watch(LoginScreenViewModel.provider);
+    final isLoading = vmState is LoginLoadingState;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -58,7 +65,7 @@ class LoginScreen extends HookConsumerWidget {
                           cursorColor: AppColors.fadedGrey,
                           decoration:
                               InputDecorations.getFormInputField('Email'),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                         ),
@@ -84,29 +91,37 @@ class LoginScreen extends HookConsumerWidget {
                             ),
                           )),
                           keyboardType: TextInputType.visiblePassword,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           textInputAction: TextInputAction.done,
-                          onSubmitted: (value) => print(
-                              '==> Submit with values ${emailTextController.text} and ${passwordTextController.text}'),
+                          onSubmitted: (value) => vm.login(
+                              emailTextController.text,
+                              passwordTextController.text),
                         ),
                       ),
                       Gap(61.spMin),
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 39.spMin),
                           child: TransquishableWidget(
-                              onTap: () => print(
-                                  '==> Login with values ${emailTextController.text} and ${passwordTextController.text}'),
+                              enabled: !isLoading,
+                              onTap: () => vm.login(emailTextController.text,
+                                  passwordTextController.text),
                               child: Container(
                                   height: 49.spMin,
-                                  decoration: Decorations.mainWhiteButton,
+                                  decoration: !isLoading
+                                      ? Decorations.mainWhiteButton
+                                      : Decorations.mainWhiteButtonDisabled,
                                   child: Center(
-                                    child: Text(
-                                      'Login',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge!
-                                          .copyWith(color: Colors.black),
-                                    ),
+                                    child: !isLoading
+                                        ? Text(
+                                            'Login',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge!
+                                                .copyWith(color: Colors.black),
+                                          )
+                                        : LoadingAnimationWidget.inkDrop(
+                                            color: Colors.black,
+                                            size: 25.spMin),
                                   )))),
                       Gap(34.spMin),
                       Padding(
@@ -123,7 +138,7 @@ class LoginScreen extends HookConsumerWidget {
             Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: 54.spMin, vertical: 3.spMin),
-              child: TermsOfServiceText(),
+              child: const TermsOfServiceText(),
             )
           ],
         ),
