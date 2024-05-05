@@ -29,12 +29,15 @@ class MyApp extends StatelessWidget {
             supportedLocales: Lang.delegate.supportedLocales,
             title: 'Zaituun',
             theme: ThemeData(
+              brightness: Brightness.dark,
               textTheme: Theme.of(context)
                   .textTheme
-                  .merge(Typography.blackCupertino)
+                  .merge(Typography.whiteCupertino)
                   .apply(fontSizeFactor: 1.sp),
-              colorScheme:
-                  ColorScheme.fromSeed(seedColor: const Color(0xFF1E6B1C)),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF1E6B1C),
+                brightness: Brightness.dark,
+              ),
               useMaterial3: true,
             ),
             routerConfig: router,
