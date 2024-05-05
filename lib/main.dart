@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
             supportedLocales: Lang.delegate.supportedLocales,
             title: 'Zaituun',
             theme: ThemeData(
+              cupertinoOverrideTheme: const CupertinoThemeData(
+                  brightness: Brightness.dark,
+                  barBackgroundColor: Colors.black),
               brightness: Brightness.dark,
               textTheme: Theme.of(context)
                   .textTheme

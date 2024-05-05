@@ -6,17 +6,21 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
+import 'package:zaituun/ui/screens/coming_soon/coming_soon_screen.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
 import 'package:zaituun/ui/widgets/text/terms_of_service_text.dart';
+import 'package:zaituun/utils/validator.dart';
 
-class LoginScreen extends HookConsumerWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends HookConsumerWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final passwordShown = useState(false);
     final emailTextController = useTextEditingController();
+    final emailValid = useIsEmailValid(emailTextController);
     final passwordTextController = useTextEditingController();
+    final passwordValid = useIsPasswordValid(passwordTextController);
+    final passwordShown = useState(false);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -36,7 +40,7 @@ class LoginScreen extends HookConsumerWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 37.spMin),
                     child: Text(
-                      'Log in',
+                      'Sign up',
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium!
@@ -50,6 +54,7 @@ class LoginScreen extends HookConsumerWidget {
                   ),
                   Gap(36.spMin),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 31.spMin),
@@ -90,18 +95,33 @@ class LoginScreen extends HookConsumerWidget {
                               '==> Submit with values ${emailTextController.text} and ${passwordTextController.text}'),
                         ),
                       ),
-                      Gap(61.spMin),
+                      Gap(20.spMin),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 39.spMin),
+                        child: Text(
+                          'Password Requirements:\n • Must be at least 8 characters long.\n • Must contain at least one numeric digit.\n • Must contain at least one capital letter.',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium!
+                              .copyWith(color: AppColors.fadedGrey),
+                        ),
+                      ),
+                      Gap(20.spMin),
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 39.spMin),
                           child: TransquishableWidget(
+                              enabled: passwordValid.value && emailValid.value,
                               onTap: () => print(
-                                  '==> Login with values ${emailTextController.text} and ${passwordTextController.text}'),
+                                  '==> Sign up with values ${emailTextController.text} and ${passwordTextController.text}'),
                               child: Container(
                                   height: 49.spMin,
-                                  decoration: Decorations.mainWhiteButton,
+                                  decoration:
+                                      passwordValid.value && emailValid.value
+                                          ? Decorations.mainWhiteButton
+                                          : Decorations.mainWhiteButtonDisabled,
                                   child: Center(
                                     child: Text(
-                                      'Login',
+                                      'Register',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!
