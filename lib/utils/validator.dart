@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Validator {
   static bool checkEmpty(String text) {
-    return text.length != 0;
+    return text.isNotEmpty;
   }
 
   static bool checkEmail(String text) {

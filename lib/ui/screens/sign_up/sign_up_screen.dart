@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
-import 'package:zaituun/ui/screens/coming_soon/coming_soon_screen.dart';
 import 'package:zaituun/ui/screens/sign_up/sign_up_screen_states.dart';
 import 'package:zaituun/ui/screens/sign_up/sign_up_view_model.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
@@ -70,7 +69,7 @@ class SignUpScreen extends HookConsumerWidget {
                           cursorColor: AppColors.fadedGrey,
                           decoration:
                               InputDecorations.getFormInputField('Email'),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.next,
                         ),
@@ -157,7 +156,7 @@ class SignUpScreen extends HookConsumerWidget {
             Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: 54.spMin, vertical: 3.spMin),
-              child: TermsOfServiceText(),
+              child: const TermsOfServiceText(),
             )
           ],
         ),

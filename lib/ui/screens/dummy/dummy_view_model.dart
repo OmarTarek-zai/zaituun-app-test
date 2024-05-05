@@ -18,7 +18,7 @@ class DummyViewModel extends StateNotifier<DummyScreenState> {
 
   Future<void> incrementCounter(BuildContext context) async {
     state = const LoadingState();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       ref.read(counterProvider.notifier).state++;
       state = const SuccessfulState();
     });

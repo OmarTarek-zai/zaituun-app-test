@@ -1,11 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:zaituun/core/router/app_router.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
-import 'package:zaituun/ui/widgets/buttons/squishable_widget.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
 import 'package:zaituun/ui/widgets/text/terms_of_service_text.dart';
 
@@ -34,7 +32,7 @@ class OnboardingScreen extends StatelessWidget {
                       Container(
                         width: 122.spMin,
                         height: 122.spMin,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.grey,
                           shape: BoxShape.circle,
                         ),
@@ -114,7 +112,7 @@ class OnboardingScreen extends StatelessWidget {
               )),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 23.spMin),
-                child: TermsOfServiceText(),
+                child: const TermsOfServiceText(),
               ),
               Gap(20.spMin)
             ],

@@ -25,6 +25,7 @@ dependencies:
   email_validator: ^2.1.17
   loading_animation_widget: ^1.2.1
 
+  intl: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
