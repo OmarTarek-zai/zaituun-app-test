@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zaituun/core/network/api/mastodon_api.dart';
 import 'package:zaituun/core/router/app_router.dart';
 import 'package:zaituun/ui/constants/app_colors.dart';
 import 'package:zaituun/ui/constants/decorations.dart';
 import 'package:zaituun/ui/widgets/buttons/transquishable_widget.dart';
 import 'package:zaituun/ui/widgets/text/terms_of_service_text.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends ConsumerWidget {
   const OnboardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.black,
@@ -89,7 +91,12 @@ class OnboardingScreen extends StatelessWidget {
                             ),
                             Gap(21.spMin),
                             TransquishableWidget(
-                              onTap: () => const LoginRoute().push(context),
+                              onTap: () async {
+                                final token = await ref
+                                    .read(mastodonTestApiProvider)
+                                    .signIn();
+                                print(token);
+                              },
                               child: Container(
                                   height: 49.spMin,
                                   decoration: Decorations.secondaryWhiteButton,

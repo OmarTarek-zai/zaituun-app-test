@@ -14,19 +14,21 @@ class MastodonZApi {
     required this.instance,
     required this.clientId,
     required this.clientSecret,
-    this.accessToken,
-    this.refreshToken,
-  });
+    String accessToken =
+        'MVuD5odb4fHiAulmMrSo4XiPhwqcCpZwFeHylbnTxvA', //The dev token
+    String? refreshToken,
+  })  : _refreshToken = refreshToken,
+        _accessToken = accessToken;
 
-  final String? accessToken;
-  final String? refreshToken;
+  final String? _accessToken;
+  final String? _refreshToken;
   final String instance;
   final String clientId;
   final String clientSecret;
 
   late final _api = MastodonApi(
       instance: instance,
-      bearerToken: accessToken ?? '',
+      bearerToken: _accessToken ?? '',
       timeout: const Duration(seconds: 5),
       retryConfig: RetryConfig(maxAttempts: 3));
 
@@ -45,7 +47,6 @@ class MastodonZApi {
       redirectUri: 'org.example.oauth://callback/',
       customUriScheme: 'org.example.oauth',
     );
-
     final response = await oauth2.executeAuthCodeFlow(scopes: [
       mauth.Scope.read,
       mauth.Scope.write,
