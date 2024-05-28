@@ -1,7 +1,6 @@
 # Build Pipeline for Flutter App
 
-This document explains the build pipeline for the Flutter app configured using GitHub Actions.
-
+This document outlines the creation of a pipeline using GitHub Actions to automate the build process for the Flutter app on iOS and Android on PR merge, as well as the storage of the corresponding artifacts.
 ## Workflow File Overview
 
 The workflow file `.github/workflows/build_flutter.yaml` is triggered on every push to the `main` branch.
@@ -22,9 +21,4 @@ Each job includes the following steps:
     - iOS: No codesiging is used during the build for iOS.  `flutter build ios --release --no-codesign`
 
 - **Upload artifact**: Uses `actions/upload-artifact@v2` to store the build output for apk and ios-app.
-
-
-## Triggering the Workflow
-
-The workflow triggers automatically on every push to the `main` branch. You can also trigger it manually via the Actions tab in GitHub.
 
