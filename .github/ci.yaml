@@ -1,0 +1,55 @@
+name: Build Flutter App
+on:
+  push:
+    branches:
+      - main
+jobs:
+  flutter-test:
+    name: Test Flutter 
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo"test done"
+
+  build-android:
+    name: Build Flutter (Android)
+    needs: [flutter-test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.19.0
+
+      - run: flutter pub get
+      - run: flutter build apk --release
+
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+   
+
+  build-ios:
+    name: Build Flutter (iOS)
+    needs: [flutter-test]
+    runs-on: macos-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
+
+      - name: Upload iOS IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-ipa
+          path: build/ios/ipa/*.ipa
+    
